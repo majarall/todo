@@ -13,13 +13,15 @@ type Task struct {
     Description string
     Done        bool
     CreatedAt   time.Time
+    HasDeadline bool
+    Deadline    time.Time
 }
 
 var tasks []Task
 var lastID int
 
 
-func AddTask(description string) (Task, error) {
+func AddTask(description string, deadline *time.Time) (Task, error) {
     // Load existing tasks
     if err := LoadTasks(); err != nil {
         return Task{}, err
@@ -40,7 +42,12 @@ func AddTask(description string) (Task, error) {
         Description: description,
         Done:        false,
         CreatedAt:   time.Now(),
+        HasDeadline: deadline != nil,
+        Deadline:    time.Time{},
     }
+    if deadline != nil{
+        task.Deadline = *deadline
+}
     tasks = append(tasks, task)
 
     // Save all tasks
