@@ -51,6 +51,30 @@ func AddTask(description string) (Task, error) {
     return task, nil
 }
 
+func DeleteTask(id int) error {
+
+    if err := LoadTasks(); err != nil {return err}
+
+    index := -1
+    for i, task := range tasks {
+        if task.ID == id {
+            index = i 
+            break
+    }
+
+    }
+    if index == -1{
+        return fmt.Errorf("task with ID %d not found", id)
+    }
+
+    // Remove the task by taking everything before and after it
+    tasks = append(tasks[:index], tasks[index+1:]...)
+    
+    return SaveTasks()
+
+
+}
+
 const taskFile = "tasks.json"
 
 // SaveTasks saves tasks to file
