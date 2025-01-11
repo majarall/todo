@@ -27,7 +27,11 @@ var listCmd = &cobra.Command{
             if task.Done {
                 status = "✓"
             }
-            fmt.Printf("[%s] %d: %s\n", status, task.ID, task.Description)
+            deadlineInfo := ""
+            if task.HasDeadline {
+                deadlineInfo = fmt.Sprintf(" (Due: %s)", task.Deadline.Format("2006-01-02"))
+            }
+            fmt.Printf("[%s] %d: %s%s\n", status, task.ID, task.Description, deadlineInfo)
         }
     },
 }
